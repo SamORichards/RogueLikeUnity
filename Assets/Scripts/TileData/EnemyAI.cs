@@ -6,7 +6,6 @@ public class EnemyAI : MonoBehaviour {
     int[,] posData;
     GameObject map;
     Vector3 pos;
-    public bool isPlayerSeen;
     TileMap tm;
     double health;
     TMData td;
@@ -23,7 +22,6 @@ public class EnemyAI : MonoBehaviour {
         tm = map.GetComponent<TileMap>();
         td = tm.returnTMData();
         posData = new int[tm.size_x,tm.size_z];
-        isPlayerSeen = false;
         health = 25;
         DMG = 5;
         timeToAttack = 25;
@@ -79,13 +77,13 @@ public class EnemyAI : MonoBehaviour {
                 if (canSeePlayer())
                 {
                     var heading = playerCollider.transform.position - transform.position;
-                    if (heading.magnitude > 1.1)
+                    if (heading.magnitude > 1.3)
                     {
                         transform.position = Vector3.MoveTowards(transform.position, playerCollider.transform.position, 0.1f);
                         transform.LookAt(playerCollider.transform.position);
                         lastKnownPos = playerCollider.transform.position;
                     }
-                    if (heading.magnitude <= 1.3)
+                    if (heading.magnitude <= 1.4)
                     {
                         if (timeToAttack == 0)
                         {

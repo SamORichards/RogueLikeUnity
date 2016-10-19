@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class TMData {
     int maxTries = 0;
+    int tileSize;
+
     protected class DRoom{
         public int left;
         public int top;
@@ -69,9 +71,10 @@ public class TMData {
         WALL_TILE
     }
 
-    public TMData(int size_y, int size_x) {
+    public TMData(int size_y, int size_x, int tileSize) {
         this.size_y = size_y;
         this.size_x = size_x;
+        this.tileSize = tileSize;
         int numRooms = size_x / 5;
         Map_data = new int[size_x, size_y];
         for (int x = 0; x < size_x; x++) {
@@ -81,13 +84,13 @@ public class TMData {
             }
         }
         Room_List = new List<DRoom>();
-        while(numRooms > 0)
+        while (numRooms > 0)
         {
             int RX = Random.Range(Random.Range(25, 40), 7);
-            int RY = Random.Range(Random.Range(15, Random.Range(18,35)), 6);
+            int RY = Random.Range(Random.Range(15, Random.Range(18, 35)), 6);
             DRoom r = new DRoom();
-            r.left = Random.Range(1, size_x - RX -1);
-            r.top = Random.Range(1, size_y - RY -1);
+            r.left = Random.Range(1, size_x - RX - 1);
+            r.top = Random.Range(1, size_y - RY - 1);
             r.width = RX;
             r.height = RY;
 
@@ -107,9 +110,10 @@ public class TMData {
         foreach (DRoom r2 in Room_List) {
             MakeRoom(r2);
         }
-        for (int count =0; count < Room_List.Count; count++)
+        for(int count2 = 0; count2 < 2; count2++) {
+        for (int count = 0; count < Room_List.Count; count++)
         {
-            int room2 =0;
+            int room2 = 0;
             bool isntSameRoom = false;
             while (!isntSameRoom) {
                 room2 = Random.Range(0, Room_List.Count);
@@ -118,11 +122,9 @@ public class TMData {
                     isntSameRoom = true;
                 }
             }
-            if (Room_List[count].isConnected == false)
-            {
-                    makeCorridor(Room_List[count], Room_List[room2]);
-            }
+            makeCorridor(Room_List[count], Room_List[room2]);
         }
+    }
         for (int x = 0; x < size_x -1; x++)
         {
             for (int y = 0; y < size_y -1; y++)
@@ -208,7 +210,7 @@ public class TMData {
 
 
     public object getTileAt(int x, int y) {
-        return Map_data[x, y];
+        return Map_data[x / tileSize, y / tileSize];
     }
 
     void MakeRoom(DRoom r)

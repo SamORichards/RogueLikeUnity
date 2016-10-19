@@ -10,19 +10,21 @@ public class ItemHandler : MonoBehaviour {
     
 
 
-    public void spawnObjects(TMData map, int sizeX, int sizeY) {
+    public void spawnObjects(TMData map, int sizeX, int sizeY, float tileSize) {
         int itemNum = (sizeX * sizeY) / 750;
         int itemNumOrigianl = itemNum;
-        itemMap = new int[sizeX, sizeY];
-        for (int x = 0; x < sizeX; x++) {
-            for (int y = 0; y < sizeY; y++)
+        float tempX = sizeX * tileSize;
+        float tempY = sizeY * tileSize;
+        itemMap = new int[(int)tempX, (int) tempY];
+        for (int x = 0; x < sizeX * tileSize; x++) {
+            for (int y = 0; y < sizeY * tileSize; y++)
             {
                 itemMap[x, y] = 0;
             }
         }
         while (itemNum > 0) {
-            int x = Random.Range(1, sizeX);
-            int y = Random.Range(1, sizeY);
+            int x = (int)Random.Range(1, sizeX * tileSize);
+            int y = (int)Random.Range(1, sizeY * tileSize);
             if ((int)map.getTileAt(x, y) == (int)TMData.TileType.FLOOR_TILE) {
                 float totY = -sizeY + y + 0.5f;
                 Vector3 pos = new Vector3(x + 0.5f, 0.6f, totY);
@@ -38,7 +40,7 @@ public class ItemHandler : MonoBehaviour {
             itemObject.transform.parent = ItemsManger.transform;
         }
         Debug.Log(itemNumOrigianl + " Items Spawned");
-        GetComponent<EnemiesHandler>().spawnEnemies(map, sizeX, sizeY, itemMap);
+        GetComponent<EnemiesHandler>().spawnEnemies(map, sizeX, sizeY, tileSize, itemMap);
 
     }
     public void reset() {

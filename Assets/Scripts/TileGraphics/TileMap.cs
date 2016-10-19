@@ -8,10 +8,18 @@ using System;
 public class TileMap : MonoBehaviour
 {
 
-    public int size_x = 50;
-    public int size_z = 50;
-    public float tileSize = 1.0f;
+    public int size_x;
+    public int size_z;
+    public int tileSize;
     TMData map;
+    public Texture2D tileTextures;
+    public int tileRes;
+    public GameObject Block;
+    public GameObject go;
+    public GameObject WallParent;
+    public GameObject GameMangers;
+
+
 
     internal TMData returnTMData() {
         return map;
@@ -27,18 +35,7 @@ public class TileMap : MonoBehaviour
         return pos;
     }
 
-    public Texture2D tileTextures;
-    public int tileRes;
-    public GameObject Block;
-    public GameObject go;
-    public GameObject WallParent;
-    public GameObject GameMangers;
 
-    // Use this for initialization
-    void Start()
-    {
-        CreateMesh();
-    }
 
 
     Color[][] chopUpTile() {
@@ -57,7 +54,7 @@ public class TileMap : MonoBehaviour
 
 
     void CreateTexture() {
-        map = new TMData(size_z, size_x);
+        map = new TMData(size_z, size_x, tileSize);
         int textureWidth = size_x * tileRes;
         int textureHight = size_z * tileRes;
         Texture2D texture = new Texture2D(textureWidth, textureHight);
@@ -85,19 +82,19 @@ public class TileMap : MonoBehaviour
             {
                 for (int y = 0; y < size_z; y++)
                 {
-                if ((int)td.getTileAt(x, y) == (int)TMData.TileType.WALL_TILE)
+                if ((int)td.getTileAt(x * tileSize, y * tileSize) == (int)TMData.TileType.WALL_TILE)
                 {
                     float totY = -size_z + y + 0.5f;
-                    Vector3 pos = new Vector3(x + 0.5f, 0, totY);
+                    Vector3 pos = new Vector3((x * tileSize) + (0.5f * tileSize), 0, totY*tileSize);
                     Quaternion rot = new Quaternion(0, 0, 0, 0);
-                    Block.transform.localScale = new Vector3(1, UnityEngine.Random.Range(0.5f, 3.5f), 1);
+                    Block.transform.localScale = new Vector3(tileSize, UnityEngine.Random.Range(0.5f, 3.5f), tileSize);
                     Instantiate(Block, pos, rot);
                 }
                 else if ((int)td.getTileAt(x, y) == (int)TMData.TileType.STONE_TILE) {
                     float totY = -size_z + y + 0.5f;
-                    Vector3 pos = new Vector3(x + 0.5f, 0, totY);
+                    Vector3 pos = new Vector3((x * tileSize) + (0.5f * tileSize), 0, totY*tileSize);
                     Quaternion rot = new Quaternion(0, 0, 0, 0);
-                    Block.transform.localScale = new Vector3(1, UnityEngine.Random.Range(0.5f, 5), 1);
+                    Block.transform.localScale = new Vector3(tileSize, UnityEngine.Random.Range(0.5f, 5), tileSize);
                     Instantiate(Block, pos, rot);
                 }
                 }
@@ -108,12 +105,15 @@ public class TileMap : MonoBehaviour
             wallsTemp.transform.parent = WallParent.transform;
         }
         ItemHandler IH = GameMangers.GetComponent<ItemHandler>();
-        IH.spawnObjects(td, size_x, size_z);
+        IH.spawnObjects(td, size_x, size_z, tileSize);
+        GameObject.Find("GameMangers").GetComponent<GameManger>().loadingScreen = GameObject.Find("CanvasLoadingScreen");
+        GameObject.Find("CanvasLoadingScreen").SetActive(false);
     }
 
-    public void CreateMesh()
+    public void CreateMesh(int size_x, int size_z)
     {
-
+        this.size_x = size_x;
+        this.size_z = size_z;
         int numTiles = size_x * size_z;
         int numTris = numTiles * 2;
 

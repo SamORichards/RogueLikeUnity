@@ -10,7 +10,7 @@ public class TileMapInspector : Editor {
         DrawDefaultInspector();
         if (GUILayout.Button("Regenerate")) {
             TileMap tileMap = (TileMap)target;
-            tileMap.CreateMesh();
+            tileMap.CreateMesh(tileMap.size_x, tileMap.size_z);
         }
         if (GUILayout.Button("Destory Walls")) {
             GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");

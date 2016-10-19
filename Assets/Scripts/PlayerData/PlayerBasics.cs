@@ -78,7 +78,6 @@ public class PlayerBasics : MonoBehaviour {
             //enter attack code here
             if (timeAttacking == 0)
             {
-                GetComponentInChildren<SwordScript>().swingSword();
                 timeAttacking = 1;
             }
             else if (timeAttacking < 10)
@@ -89,7 +88,6 @@ public class PlayerBasics : MonoBehaviour {
             {
                 timeAttacking = 0;
                 isAttacking = false;
-                GetComponentInChildren<SwordScript>().stopSwingSword();
             }
         }
 

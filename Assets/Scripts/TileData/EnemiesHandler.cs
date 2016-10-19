@@ -8,7 +8,7 @@ public class EnemiesHandler : MonoBehaviour {
     int enemiesNum;
     int enemyNumOrginal;
 
-    public void spawnEnemies(TMData map, int sizeX, int sizeY, int[,] itemMap)
+    public void spawnEnemies(TMData map, int sizeX, int sizeY, float tileSize, int[,] itemMap)
     {
 
         enemiesNum = (sizeX * sizeY) / 750;
@@ -16,8 +16,8 @@ public class EnemiesHandler : MonoBehaviour {
 
         while (enemiesNum > 0)
         {
-            int x = UnityEngine.Random.Range(1, sizeX);
-            int y = UnityEngine.Random.Range(1, sizeY);
+            int x = (int)UnityEngine.Random.Range(1, sizeX * tileSize);
+            int y = (int)UnityEngine.Random.Range(1, sizeY * tileSize);
             if ((int)map.getTileAt(x, y) == (int)TMData.TileType.FLOOR_TILE && itemMap[x,y] == 0)
             {
                 float totY = -sizeY + y + 0.5f;

@@ -5,6 +5,8 @@ public class PlayerController : MonoBehaviour {
     public Vector3 velocity;
     float moveY, moveX;
     public int moveSpeed = 6;
+    public playerControl pC;
+
 
     public void setSpawn(TMData map, int sizeX, int sizeY) {
         bool canSpawn = false;
@@ -32,6 +34,10 @@ public class PlayerController : MonoBehaviour {
     void FixedUpdate() {
         velocity = new Vector3(moveX * moveSpeed, 0, moveY * moveSpeed);
         CharacterController cc = GetComponent<CharacterController>();
+        if (velocity.y > 0 || velocity.x > 0 || velocity.z > 0)
+        {
+            pC.BattleWalkForward();
+        }
         cc.SimpleMove(velocity);
 
     }
